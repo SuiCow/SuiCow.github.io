@@ -1,0 +1,66 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffecf2; /* Light pink */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: #cc3366; /* Dark pink */
+}
+
+.question {
+    font-size: 20px;
+    color: #ff6699; /* Pink */
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff6699; /* Pink */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #ff3366; /* Darker pink */
+}
+
+/* Additional styles for floating fencer icons */
+.fencer {
+    position: absolute;
+    width: 75px; /* Adjust size as needed */
+    height: 75px; /* Adjust size as needed */
+    background-image: url('lilyface.png'); /* Replace 'lilyface.png' with your fencer icon image */
+    background-size: cover;
+    pointer-events: none; /* Prevents fencer icons from being clickable */
+    animation: moveFencer 10s infinite alternate; /* Animation settings */
+    z-index: 2;
+}
+
+/* Keyframes for fencer animation */
+@keyframes moveFencer {
+    from { transform: translateY(0); }
+    to { transform: translateY(100px); }
+}
+
+/* Style for Click Anywhere text */
+#clickAnywhere {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Ensure text is on top of fencer icons */
+}
