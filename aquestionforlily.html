@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promposal to Lily</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        /* Additional styles for floating fencer icons */
+        .fencer {
+            position: absolute;
+            width: 75px; /* Adjust size as needed */
+            height: 75px; /* Adjust size as needed */
+            background-image: url('lilyface.png'); /* Replace 'lilyface.png' with your fencer icon image */
+            background-size: cover;
+            pointer-events: none; /* Prevents fencer icons from being clickable */
+            animation: moveFencer 10s infinite alternate; /* Animation settings */
+            z-index: 2;
+        }
+
+        /* Keyframes for fencer animation */
+        @keyframes moveFencer {
+            from { transform: translateY(0); }
+            to { transform: translateY(50px); }
+        }
+
+        /* Style for Click Anywhere text */
+        #clickAnywhere {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1; /* Ensure text is on top of fencer icons */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="header">Click Anywhere</h1>
+        <!-- Additional div for fencer icons -->
+        <div id="fencer-container"></div>
+        <p id="prompt"></p>
+        <button id="yesBtn" style="display: none;" onclick="acceptPromposal()">Yes</button>
+        <button id="noBtn" style="display: none;" onclick="rejectPromposal()">No</button>
+        <input type="hidden" id="response" value="">
+    </div>
+
+    <script>
+        // Function to create a fencer icon at random position without overlapping
+        function createFencer() {
+            var fencer = document.createElement('div');
+            fencer.className = 'fencer';
+            var x, y;
+            do {
+                x = Math.random() * window.innerWidth; // Random x position
+                y = Math.random() * window.innerHeight; // Random y position
+            } while (isOverlapping(x, y)); // Check if the new fencer overlaps with existing ones
+            fencer.style.left = x + 'px';
+            fencer.style.top = y + 'px';
+            document.getElementById('fencer-container').appendChild(fencer);
+        }
+
+        // Function to check if the new fencer overlaps with existing ones
+        function isOverlapping(x, y) {
+            var fencers = document.querySelectorAll('.fencer');
+            for (var i = 0; i < fencers.length; i++) {
+                var rect = fencers[i].getBoundingClientRect();
+                var fx = rect.left + window.scrollX;
+                var fy = rect.top + window.scrollY;
+                var fw = rect.width;
+                var fh = rect.height;
+                if (x < fx + fw && x + 50 > fx && y < fy + fh && y + 50 > fy) {
+                    return true; // Overlaps with an existing fencer
+                }
+            }
+            return false; // No overlap
+        }
+
+        // Create multiple fencer icons
+        for (var i = 0; i < 15; i++) {
+            createFencer();
+        }
+
+        // Click event listener to reveal the promposal question
+        document.addEventListener('click', function() {
+            document.getElementById('header').innerHTML = 'Concerning April 13th/20th';
+            document.getElementById('prompt').innerHTML = 'Lily, will you go to fencing prom with me? I need a date.';
+            document.getElementById('yesBtn').style.display = 'inline-block';
+            document.getElementById('noBtn').style.display = 'inline-block';
+        });
+
+        // Functions for handling the promposal response
+        function acceptPromposal() {
+            document.getElementById("response").value = "Yes";
+            sendResponse();
+        }
+
+        function rejectPromposal() {
+            document.getElementById("response").value = "No";
+            sendResponse();
+        }
+
+        function sendResponse() {
+            var response = document.getElementById("response").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/response", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({ response: response }));
+            alert("Your promposal response has been recorded. Thank you!");
+        }
+    </script>
+</body>
+</html>
